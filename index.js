@@ -13,11 +13,53 @@ mongoose
   .then(x => {
     console.log(`Connected to the database: "${x.connection.name}"`);
     // Before adding any recipes to the database, let's remove all existing ones
-    return Recipe.deleteMany()
+    // return Recipe.deleteMany()
   })
   .then(() => {
-    // Run your code here, after you have insured that the connection was made
+    Recipe.create(data[2])
+    .then((newRecepie)=>{
+          console.log(newRecepie.title)}
+    )
   })
   .catch(error => {
     console.error('Error connecting to the database', error);
-  });
+  })
+
+///Iteration 3 - Insert multiple recipes
+
+ .then(()=>{
+    Recipe.insertMany(data)
+    .then((res)=> res.forEach((recipe)=>{
+      console.log(recipe.title)
+    }))
+ })
+ .catch(error => {
+  console.error('Error connecting to the database', error);
+})
+
+ 
+//////////////Iteration 4 - Update recipe
+
+ .then(()=>{
+   Recipe.findByIdAndUpdate({title : "Rigatoni alla Genovese"}, {duration : 100} )
+   .then(() => console.log("The update was done!"))
+ })
+   .catch(error => {
+      console.error('Error connecting to the database', error);
+    })
+  
+
+///////////////////////Iteration 5 - Remove a recipe
+
+.then(()=>{
+  Recipe.deleteOne({title : "Carrot Cake"})
+  .then(()=> console.log("The delete was done!"))
+})
+.catch(error => {
+  console.error('Error connecting to the database', error);
+})
+
+///////////////////Iteration 6 - Close the Database
+.finally(()=>
+mongoose.connection.close()
+)
